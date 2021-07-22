@@ -24,34 +24,59 @@ public class JWTutils {
         Calendar instance = Calendar.getInstance();
         //默认令牌过期时间7天
         instance.add(Calendar.DATE, 7);
+       // instance.add(Calendar.SECOND,20);
+        //如果不设置head，则使用默认head设置
 
-        JWTCreator.Builder builder = JWT.create();
-        builder.withClaim("userId", u.getId())
-                .withClaim("username", u.getUsername());
-
-//        return builder.withExpiresAt(instance.getTime())
-//                .sign(Algorithm.HMAC256(u.getPassword()));
-                return builder.withExpiresAt(instance.getTime())
+        String token = JWT.create()
+                .withClaim("userId", u.getId())
+                .withClaim("username", u.getUsername())
+                .withExpiresAt(instance.getTime())
                 .sign(Algorithm.HMAC256(SECRET));
+
+
+                return token;
     }
 
     /**
      * 验证token合法性 成功返回token
      */
     public static DecodedJWT verify(String token) throws Exception {
+        //创建一个验证对象
+        try {
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
+            DecodedJWT decodedToken = verifier.verify(token);
+            return decodedToken;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        //通过验证对象，将token解码，得到解码后的token对象。
+     //   DecodedJWT decodedToken = verifier.verify(token);
+        //可以在decodedJWT获取内部数据
+       // System.out.println(decodedToken.getClaim("username").asString());
+
         if(StringUtils.isEmpty(token)){
             throw new Exception("token不能为空");
         }
 
         //获取登录用户真正的密码假如数据库查出来的是123456
       //  String password = "admin";
-        JWTVerifier build = JWT.require(Algorithm.HMAC256(SECRET)).build();
-        return build.verify(token);
+
+        //return decodedToken;
+        return null;
     }
 
-   /* public static void main(String[] args) {
-        DecodedJWT verify = verify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTcxMDg1MDAsInVzZXJuYW1lIjoiYWRtaW4ifQ.geBEtpluViRUg66_P7ZisN3I_d4e32Wms8mFoBYM5f0");
-        System.out.println(verify.getClaim("password").asString());
-    }*/
+    public static void main(String[] args) throws Exception {
+        User user = new User();
+        user.setUsername("admin");
+        user.setId(1);
+        String token = getToken(user);
+        System.out.println("创造token："+token);
+        DecodedJWT verify = verify(token);
+
+        System.out.println("解码后："+verify.toString());
+
+        System.out.println(token.equals(verify.toString()));
+    }
+
 
 }
