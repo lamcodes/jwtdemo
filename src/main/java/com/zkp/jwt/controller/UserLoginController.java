@@ -33,20 +33,18 @@ public class UserLoginController {
         }
 
         @GetMapping("test")
-        public String test(HttpServletRequest request) {
-            String token = request.getHeader("token");
-            System.out.println(token);
+        public String test( ) {
             return "访问test - API";
         }
 
-
-        @GetMapping("/t1")
-    public String t1(HttpServletRequest request,String name){
-
-            request.getSession().setAttribute("username",name);
-            System.out.println(request.getSession().getAttribute("username"));
-            return "查看cookie";
-        }
+//
+//        @GetMapping("/t1")
+//    public String t1(HttpServletRequest request,String name){
+//
+//        //    request.getSession().setAttribute("username",name);
+//          //  System.out.println(request.getSession().getAttribute("username"));
+//            return "查看cookie";
+//        }
 
 
 

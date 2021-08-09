@@ -5,6 +5,7 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -45,7 +46,7 @@ public class JWTInterceptor implements HandlerInterceptor {
         }
         String s = new ObjectMapper().writeValueAsString(map);
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().println(s);
+      //  response.getWriter().println(s);
         return true;
     }
 
