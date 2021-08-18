@@ -1,5 +1,13 @@
 package com.zkp.jwt.Test;
 
+import com.zkp.jwt.pojo.User;
+
+import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class TestException {
     /**
      * throws声明：如果一个方法内部的代码会抛出检查异常（checked exception），
@@ -21,12 +29,23 @@ public class TestException {
 //        }
 //        throw new Exception("抛出异常后，后续语句会显示编译错误，无法执行");
 //        System.out.println("xxxxxx");
-
+        User user = new User(11,"zkp","dfa");
+        User user1 = new User(1,"dfa","nihao");
+        List<User> list = new ArrayList<>();
+        list.add(user);
+        list.add(user1);
+        List<Integer> collect = list.stream().map(e -> e.getId()).collect(Collectors.toList());
+        IntSummaryStatistics collect1 = list.stream().collect(Collectors.summarizingInt(User::getId));
+        Map<Integer, String> collect2 = list.stream().collect(Collectors.toMap(User::getId, User::getUsername));
+        System.out.println(collect2);
+        System.out.println(collect);
+        System.out.println(collect1);
         try {
             foo();
         } catch (ArithmeticException ae) {
             System.out.println("处理异常");
            // ae.printStackTrace();
+            throw new Exception("抛出了异常");
         }
         System.out.println("异常被捕获后会执行");
 //        foo();
